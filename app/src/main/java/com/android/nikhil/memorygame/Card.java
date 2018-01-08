@@ -1,5 +1,7 @@
 package com.android.nikhil.memorygame;
 
+import com.wajahatkarim3.easyflipview.EasyFlipView;
+
 /**
  * Created by NIKHIL on 08-01-2018.
  */
@@ -8,12 +10,19 @@ public class Card {
 
     private int id;
     private int imageRes;
-    private boolean turned = false;
+    private EasyFlipView flipView;
 
-    public Card(int id, int imageRes, boolean turned) {
+    public EasyFlipView getFlipView() {
+        return flipView;
+    }
+
+    public void setFlipView(EasyFlipView flipView) {
+        this.flipView = flipView;
+    }
+
+    public Card(int id, int imageRes) {
         this.id = id;
         this.imageRes = imageRes;
-        this.turned = turned;
     }
 
     public int getId() {
@@ -26,17 +35,5 @@ public class Card {
 
     public int getImageRes() {
         return imageRes;
-    }
-
-    public void setImageRes(int imageRes) {
-        this.imageRes = imageRes;
-    }
-
-    public boolean isTurned() {
-        return turned;
-    }
-
-    public void setTurned(boolean turned) {
-        this.turned = turned;
     }
 }

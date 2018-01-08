@@ -30,11 +30,20 @@ public class MainActivity extends AppCompatActivity {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width, height);
 
         cardsList = new ArrayList<>();
+        cardsList.add(new Card(1, R.drawable.ic_color_lens));
+        cardsList.add(new Card(2, R.drawable.ic_color_lens));
+        cardsList.add(new Card(3, R.drawable.ic_fingerprint));
+        cardsList.add(new Card(4, R.drawable.ic_fingerprint));
+        cardsList.add(new Card(5, R.drawable.ic_pets));
+        cardsList.add(new Card(6, R.drawable.ic_pets));
+        cardsList.add(new Card(7, R.drawable.ic_gamepad));
+        cardsList.add(new Card(8, R.drawable.ic_gamepad));
+
         recyclerView = findViewById(R.id.recyclerView);
         cardAdapter = new CardAdapter(this, cardsList);
         cardAdapter.setParams(params);
         recyclerView.setAdapter(cardAdapter);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-
     }
+
 }

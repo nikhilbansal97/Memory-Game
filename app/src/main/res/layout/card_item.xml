@@ -6,32 +6,18 @@
     android:foreground="?selectableItemBackground"
     android:layout_height="150dp">
 
-    <android.support.v7.widget.CardView
+    <com.wajahatkarim3.easyflipview.EasyFlipView
+        android:id="@+id/flipView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:foreground="?selectableItemBackground"
-        android:layout_margin="4dp"
-        android:background="@color/white_200"
-        app:cardCornerRadius="4dp"
-        app:cardElevation="10dp">
+        app:flipOnTouch="false"
+        app:flipEnabled="true"
+        app:flipDuration="400"
+        app:flipType="horizontal">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:foreground="?selectableItemBackground"
-            android:background="@drawable/gradient">
+        <include layout="@layout/card_back"/>
 
-            <TextView
-                android:id="@+id/cardViewTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:fontFamily="sans-serif"
-                android:textColor="@color/white_200"
-                android:text="Card Name"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+        <include layout="@layout/card_front"/>
 
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
+    </com.wajahatkarim3.easyflipview.EasyFlipView>
 </RelativeLayout>

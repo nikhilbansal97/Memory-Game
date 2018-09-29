@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         cardsList.add(new Card(6, R.drawable.ic_pets));
         cardsList.add(new Card(7, R.drawable.ic_gamepad));
         cardsList.add(new Card(8, R.drawable.ic_gamepad));
+        Collections.shuffle(cardsList);
 
         recyclerView = findViewById(R.id.recyclerView);
         cardAdapter = new CardAdapter(this, cardsList);

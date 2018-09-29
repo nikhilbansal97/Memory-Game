@@ -21,12 +21,11 @@ import java.util.ArrayList;
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder> {
 
     private Context context;
-    private ArrayList<Card> cardList = new ArrayList<>();
+    private ArrayList<Card> cardList;
     private int CARDS_COUNT = 8;
     private RelativeLayout.LayoutParams params;
     private static int CARDS_FLIPPED = 0;
     private static int positionPreviousCard = 0;
-    private static final String TAG = "CardAdapter";
     private static boolean firstBinding = true;
     final Handler handler = new Handler();
 
@@ -44,7 +43,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     public void onBindViewHolder(CardViewHolder holder, final int position) {
         if (firstBinding)
             cardList.get(position).setFlipView(holder.flipView);
-        Log.d(TAG, "onBindViewHolder: " + String.valueOf(position));
         holder.textView.setText("Card Name");
         holder.rootLayout.setLayoutParams(params);
         holder.cardImageView.setImageResource(cardList.get(position).getImageRes());
@@ -58,22 +56,16 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
                 CARDS_FLIPPED++;
                 if (CARDS_FLIPPED == 1) {
                     positionPreviousCard = position;
-                    Log.d(TAG, "onViewFlipCompleted: CARDS_FLIPPED = 1, Previous = " + String.valueOf(positionPreviousCard));
                     cardList.get(position).getFlipView().setFlipEnabled(false);
                 } else if (CARDS_FLIPPED == 2  && position != positionPreviousCard) {
-                    Log.d(TAG, "onViewFlipCompleted: CARDS_FLIPPED = 2, Previous = " + String.valueOf(positionPreviousCard)
-                            + " Current = " + String.valueOf(position));
                     Card prevCard = cardList.get(positionPreviousCard);
                     Card currCard = cardList.get(position);
                     if (prevCard.getImageRes() == currCard.getImageRes()){
-                        Log.d(TAG, "onViewFlipCompleted: Cards Matched");
                         cardList.get(positionPreviousCard).getFlipView().setFlipEnabled(false);
                         cardList.get(position).getFlipView().setFlipEnabled(false);
                     } else {
-                        Log.d(TAG, "onViewFlipCompleted: Cards Don't Match");
                         cardList.get(positionPreviousCard).getFlipView().setFlipEnabled(true);
                         cardList.get(position).getFlipView().setFlipEnabled(true);
-
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -81,7 +73,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
                                 cardList.get(position).getFlipView().flipTheView();
                             }
                         },700);
-
                     }
                     CARDS_FLIPPED = 0;
                 }

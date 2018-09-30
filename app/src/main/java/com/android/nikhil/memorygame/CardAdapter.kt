@@ -11,6 +11,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import android.os.Handler
 import com.android.nikhil.memorygame.Constants.CARDS_COUNT
+import com.android.nikhil.memorygame.R.string
 import com.wajahatkarim3.easyflipview.EasyFlipView
 import kotlinx.android.synthetic.main.card_front.view.cardViewTextView
 
@@ -40,35 +41,35 @@ class CardAdapter(
   ) {
     if (firstBinding)
       cardList[position].flipView = holder.flipView
-    holder.textView.setText(R.string.card_name)
+    holder.textView.text = context.getString(string.question_mark)
     holder.rootLayout.layoutParams = params
     holder.cardImageView.setImageResource(cardList[position].imageRes)
     holder.flipView.setOnClickListener(View.OnClickListener {
       firstBinding = false
-      if (!cardList[position].flipView.isFlipEnabled)
+      if (!cardList[position].flipView!!.isFlipEnabled)
         return@OnClickListener
-      cardList[position].flipView.flipTheView()
+      cardList[position].flipView!!.flipTheView()
       CARDS_FLIPPED++
       if (CARDS_FLIPPED == 1) {
         positionPreviousCard = position
         cardList[position]
-            .flipView.isFlipEnabled = false
+            .flipView!!.isFlipEnabled = false
       } else if (CARDS_FLIPPED == 2 && position != positionPreviousCard) {
         val prevCard = cardList[positionPreviousCard]
         val currCard = cardList[position]
         if (prevCard.imageRes == currCard.imageRes) {
           cardList[positionPreviousCard]
-              .flipView.isFlipEnabled = false
+              .flipView!!.isFlipEnabled = false
           cardList[position]
-              .flipView.isFlipEnabled = false
+              .flipView!!.isFlipEnabled = false
         } else {
           cardList[positionPreviousCard]
-              .flipView.isFlipEnabled = true
+              .flipView!!.isFlipEnabled = true
           cardList[position]
-              .flipView.isFlipEnabled = true
+              .flipView!!.isFlipEnabled = true
           handler.postDelayed({
-            cardList[positionPreviousCard].flipView.flipTheView()
-            cardList[position].flipView.flipTheView()
+            cardList[positionPreviousCard].flipView!!.flipTheView()
+            cardList[position].flipView!!.flipTheView()
           }, 700)
         }
         CARDS_FLIPPED = 0

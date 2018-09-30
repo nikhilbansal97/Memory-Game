@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.DisplayMetrics
+import android.view.View
+import android.view.WindowManager
 import android.widget.RelativeLayout
 import com.android.nikhil.memorygame.Constants.MARGIN
 import com.android.nikhil.memorygame.Constants.SPAN_COUNT
@@ -23,6 +25,7 @@ class MainActivity : AppCompatActivity() {
 
     val displayMetrics = DisplayMetrics()
     windowManager.defaultDisplay.getMetrics(displayMetrics)
+    window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
     val height = displayMetrics.heightPixels / 4 - MARGIN
     val width = displayMetrics.widthPixels / 2 - MARGIN
     val params = RelativeLayout.LayoutParams(width, height)

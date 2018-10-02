@@ -1,6 +1,17 @@
 # Memory-Game
 Memory Game for Android. The game consists of some cards which are randomly arranged. The user has to flip the cards to get the correct pairs.
 
+## Screenshots
+
+### Home
+![Hom](https://github.com/ananya1304/Memory-Game/blob/master/Hom.png)
+
+### Matched Tiles
+![Matched](https://github.com/ananya1304/Memory-Game/blob/master/Matched.PNG)
+
+### Unmatched Tiles
+![Unmatched](https://github.com/ananya1304/Memory-Game/blob/master/Unmatched.png)
+
 ## Contributions
 
 Found a bug? Just create an `issue` and once assigned, start working on it!

@@ -1,16 +1,12 @@
 package com.android.nikhil.memorygame
 
-import android.app.AlertDialog
 import android.app.Dialog
 import android.app.DialogFragment
-import android.app.Fragment
 import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Message
-import android.support.annotation.StringRes
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.DisplayMetrics
@@ -22,20 +18,25 @@ import java.util.ArrayList
 
 class MainActivity : AppCompatActivity(), GameCallback {
 
+  private lateinit var recyclerView: RecyclerView
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
-    val cardsList = ArrayList<Card>()
-    cardsList.add(Card(R.drawable.ic_color_lens))
-    cardsList.add(Card(R.drawable.ic_fingerprint))
-    cardsList.add(Card(R.drawable.ic_pets))
-    cardsList.add(Card(R.drawable.ic_gamepad))
-    cardsList.addAll(cardsList.map { it.copy() })
-    cardsList.shuffle()
+    recyclerView = findViewById(R.id.recyclerView)
+
+    reset()
+  }
+
+  fun reset() {
+
+    val cards = getCardsList()
+
+    val cardAdapter = CardAdapter(this, cards, this, 10)
 
     val columns = 2
-    val rows = cardsList.size / columns
+    val rows = cards.size / columns
 
     val displayMetrics = DisplayMetrics()
     windowManager.defaultDisplay.getMetrics(displayMetrics)
@@ -44,19 +45,29 @@ class MainActivity : AppCompatActivity(), GameCallback {
     val width = displayMetrics.widthPixels / columns - MARGIN
     val params = RelativeLayout.LayoutParams(width, height)
 
-    val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-    val cardAdapter = CardAdapter(this, cardsList, this)
     cardAdapter.setParams(params)
     recyclerView.adapter = cardAdapter
+    recyclerView.adapter.notifyDataSetChanged()
     recyclerView.layoutManager = GridLayoutManager(this, columns)
   }
 
+  fun getCardsList(): ArrayList<Card> {
+    val cards = ArrayList<Card>()
+    cards.add(Card(R.drawable.ic_color_lens))
+    cards.add(Card(R.drawable.ic_fingerprint))
+    cards.add(Card(R.drawable.ic_pets))
+    cards.add(Card(R.drawable.ic_gamepad))
+    cards.addAll(cards.map { it.copy() })
+    cards.shuffle()
+    return cards
+  }
+
   override fun onWin() {
-    GameDialog.newInstance("WIN").show(fragmentManager, null)
+    GameDialog.newInstance(getString(R.string.win)).setOnDismissListener(DialogInterface.OnDismissListener { reset() }).show(fragmentManager, null)
   }
 
   override fun onLose() {
-    GameDialog.newInstance("GAME OVER").show(fragmentManager, null)
+    GameDialog.newInstance(getString(R.string.lose)).setOnDismissListener(DialogInterface.OnDismissListener { reset() }).show(fragmentManager, null)
   }
 }
 
@@ -77,10 +88,22 @@ class GameDialog : DialogFragment() {
     }
   }
 
+  private lateinit var dismissListener: DialogInterface.OnDismissListener
+
+  fun setOnDismissListener(listener: DialogInterface.OnDismissListener) : GameDialog {
+    dismissListener = listener
+    return this
+  }
+
+  override fun onDismiss(dialog: DialogInterface?) {
+    dismissListener.onDismiss(dialog)
+    super.onDismiss(dialog)
+  }
+
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     val view = activity.layoutInflater.inflate(R.layout.dialog_game, null)
     val message = arguments.getString("message")
-    message?.let { view.message.text = message }
+    message?.let { view.message.text = it }
     val dialog = super.onCreateDialog(savedInstanceState)
     dialog.setContentView(view)
     dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

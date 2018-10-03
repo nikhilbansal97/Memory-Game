@@ -2,4 +2,6 @@
   <string name="app_name">MemoryGame</string>
   <string name="card_name">Card Name</string>
   <string name="question_mark">\?</string>
+  <string name="win">WIN!</string>
+  <string name="lose">GAME OVER</string>
 </resources>

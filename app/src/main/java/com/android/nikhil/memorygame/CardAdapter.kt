@@ -2,7 +2,6 @@ package com.android.nikhil.memorygame
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,10 +22,17 @@ import java.util.ArrayList
 class CardAdapter(
   private val context: Context,
   private val cardList: ArrayList<Card>,
-  val gameCallback: GameCallback
+  val gameCallback: GameCallback,
+  val tryLimit: Int
 ) : RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
   private var params: RelativeLayout.LayoutParams? = null
   internal val handler = Handler()
+
+  private var cardsFlipped = 0
+  private var positionPreviousCard = 0
+  private var matches = 0
+  private var tryCount = 0
+  private var touchTempDisabled = false
 
   override fun onCreateViewHolder(
     parent: ViewGroup,
@@ -39,23 +45,24 @@ class CardAdapter(
     holder: CardViewHolder,
     position: Int
   ) {
-    if (firstBinding)
-      cardList[position].flipView = holder.flipView
+    cardList[position].flipView = holder.flipView
     holder.textView.text = context.getString(string.question_mark)
     holder.rootLayout.layoutParams = params
     holder.cardImageView.setImageResource(cardList[position].imageRes)
     holder.flipView.setOnClickListener(View.OnClickListener {
+      if(touchTempDisabled)
+          return@OnClickListener
       it as EasyFlipView
-      firstBinding = false
       if (!it.isFlipEnabled)
         return@OnClickListener
       it.flipTheView()
-      CARDS_FLIPPED++
-      if (CARDS_FLIPPED == 1) {
+      cardsFlipped++
+      if (cardsFlipped == 1) {
         positionPreviousCard = position
         cardList[position]
             .flipView!!.isFlipEnabled = false
-      } else if (CARDS_FLIPPED == 2 && position != positionPreviousCard) {
+      } else if (cardsFlipped == 2 && position != positionPreviousCard) {
+        touchTempDisabled = true
         val prevCard = cardList[positionPreviousCard]
         val currCard = cardList[position]
         if (prevCard.imageRes == currCard.imageRes) {
@@ -63,9 +70,11 @@ class CardAdapter(
               .flipView!!.isFlipEnabled = false
           cardList[position]
               .flipView!!.isFlipEnabled = false
+          touchTempDisabled = false
           matches++
           if(matches == itemCount/2) {
             gameCallback.onWin()
+            return@OnClickListener
           }
         } else {
           cardList[positionPreviousCard]
@@ -75,9 +84,16 @@ class CardAdapter(
           handler.postDelayed({
             cardList[positionPreviousCard].flipView!!.flipTheView()
             it.flipTheView()
+            touchTempDisabled = false
           }, 700)
         }
-        CARDS_FLIPPED = 0
+
+        cardsFlipped = 0
+
+        tryCount++
+        if(tryCount >= tryLimit) {
+          gameCallback.onLose()
+        }
       }
     })
   }
@@ -95,12 +111,5 @@ class CardAdapter(
 
   fun setParams(params: RelativeLayout.LayoutParams) {
     this.params = params
-  }
-
-  companion object {
-    private var CARDS_FLIPPED = 0
-    private var positionPreviousCard = 0
-    private var firstBinding = true
-    private var matches = 0
   }
 }

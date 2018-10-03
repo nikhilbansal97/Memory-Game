@@ -10,7 +10,6 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.os.Handler
-import com.android.nikhil.memorygame.Constants.CARDS_COUNT
 import com.android.nikhil.memorygame.R.string
 import com.wajahatkarim3.easyflipview.EasyFlipView
 import kotlinx.android.synthetic.main.card_front.view.cardViewTextView
@@ -23,7 +22,8 @@ import java.util.ArrayList
 
 class CardAdapter(
   private val context: Context,
-  private val cardList: ArrayList<Card>
+  private val cardList: ArrayList<Card>,
+  val gameCallback: GameCallback
 ) : RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
   private var params: RelativeLayout.LayoutParams? = null
   internal val handler = Handler()
@@ -45,10 +45,11 @@ class CardAdapter(
     holder.rootLayout.layoutParams = params
     holder.cardImageView.setImageResource(cardList[position].imageRes)
     holder.flipView.setOnClickListener(View.OnClickListener {
+      it as EasyFlipView
       firstBinding = false
-      if (!cardList[position].flipView!!.isFlipEnabled)
+      if (!it.isFlipEnabled)
         return@OnClickListener
-      cardList[position].flipView!!.flipTheView()
+      it.flipTheView()
       CARDS_FLIPPED++
       if (CARDS_FLIPPED == 1) {
         positionPreviousCard = position
@@ -62,6 +63,10 @@ class CardAdapter(
               .flipView!!.isFlipEnabled = false
           cardList[position]
               .flipView!!.isFlipEnabled = false
+          matches++
+          if(matches == itemCount/2) {
+            gameCallback.onWin()
+          }
         } else {
           cardList[positionPreviousCard]
               .flipView!!.isFlipEnabled = true
@@ -69,7 +74,7 @@ class CardAdapter(
               .flipView!!.isFlipEnabled = true
           handler.postDelayed({
             cardList[positionPreviousCard].flipView!!.flipTheView()
-            cardList[position].flipView!!.flipTheView()
+            it.flipTheView()
           }, 700)
         }
         CARDS_FLIPPED = 0
@@ -78,7 +83,7 @@ class CardAdapter(
   }
 
   override fun getItemCount(): Int {
-    return CARDS_COUNT
+    return cardList.size
   }
 
   inner class CardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -96,5 +101,6 @@ class CardAdapter(
     private var CARDS_FLIPPED = 0
     private var positionPreviousCard = 0
     private var firstBinding = true
+    private var matches = 0
   }
 }

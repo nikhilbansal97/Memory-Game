@@ -22,15 +22,15 @@ import java.util.ArrayList
 class CardAdapter(
   private val context: Context,
   private val cardList: ArrayList<Card>,
-  val gameCallback: GameCallback,
-  val tryLimit: Int
+  private val gameCallback: GameCallback,
+  private val tryLimit: Int
 ) : RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
   private var params: RelativeLayout.LayoutParams? = null
   internal val handler = Handler()
 
   private var cardsFlipped = 0
   private var positionPreviousCard = 0
-  private var matches = 0
+  private var matchesCount = 0
   private var tryCount = 0
   private var touchTempDisabled = false
 
@@ -62,6 +62,8 @@ class CardAdapter(
         cardList[position]
             .flipView!!.isFlipEnabled = false
       } else if (cardsFlipped == 2 && position != positionPreviousCard) {
+        // Disable card flipping while 2 cards are flipped to prevent >2 cards flipped
+        // Especially for during animation below
         touchTempDisabled = true
         val prevCard = cardList[positionPreviousCard]
         val currCard = cardList[position]
@@ -71,8 +73,10 @@ class CardAdapter(
           cardList[position]
               .flipView!!.isFlipEnabled = false
           touchTempDisabled = false
-          matches++
-          if(matches == itemCount/2) {
+
+          // If the number of matches is equal to the number of pairs of cards then win
+          matchesCount++
+          if(matchesCount == itemCount/2) {
             gameCallback.onWin()
             return@OnClickListener
           }

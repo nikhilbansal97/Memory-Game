@@ -2,7 +2,6 @@ package com.android.nikhil.memorygame
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,6 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.os.Handler
-import com.android.nikhil.memorygame.Constants.CARDS_COUNT
 import com.android.nikhil.memorygame.R.string
 import com.wajahatkarim3.easyflipview.EasyFlipView
 import kotlinx.android.synthetic.main.card_front.view.cardViewTextView
@@ -23,10 +21,18 @@ import java.util.ArrayList
 
 class CardAdapter(
   private val context: Context,
-  private val cardList: ArrayList<Card>
+  private val cardList: ArrayList<Card>,
+  private val gameCallback: GameCallback,
+  private val tryLimit: Int
 ) : RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
   private var params: RelativeLayout.LayoutParams? = null
   internal val handler = Handler()
+
+  private var cardsFlipped = 0
+  private var positionPreviousCard = 0
+  private var matchesCount = 0
+  private var tryCount = 0
+  private var touchTempDisabled = false
 
   override fun onCreateViewHolder(
     parent: ViewGroup,
@@ -39,22 +45,26 @@ class CardAdapter(
     holder: CardViewHolder,
     position: Int
   ) {
-    if (firstBinding)
-      cardList[position].flipView = holder.flipView
+    cardList[position].flipView = holder.flipView
     holder.textView.text = context.getString(string.question_mark)
     holder.rootLayout.layoutParams = params
     holder.cardImageView.setImageResource(cardList[position].imageRes)
     holder.flipView.setOnClickListener(View.OnClickListener {
-      firstBinding = false
-      if (!cardList[position].flipView!!.isFlipEnabled)
+      if(touchTempDisabled)
+          return@OnClickListener
+      it as EasyFlipView
+      if (!it.isFlipEnabled)
         return@OnClickListener
-      cardList[position].flipView!!.flipTheView()
-      CARDS_FLIPPED++
-      if (CARDS_FLIPPED == 1) {
+      it.flipTheView()
+      cardsFlipped++
+      if (cardsFlipped == 1) {
         positionPreviousCard = position
         cardList[position]
             .flipView!!.isFlipEnabled = false
-      } else if (CARDS_FLIPPED == 2 && position != positionPreviousCard) {
+      } else if (cardsFlipped == 2 && position != positionPreviousCard) {
+        // Disable card flipping while 2 cards are flipped to prevent >2 cards flipped
+        // Especially for during animation below
+        touchTempDisabled = true
         val prevCard = cardList[positionPreviousCard]
         val currCard = cardList[position]
         if (prevCard.imageRes == currCard.imageRes) {
@@ -62,6 +72,14 @@ class CardAdapter(
               .flipView!!.isFlipEnabled = false
           cardList[position]
               .flipView!!.isFlipEnabled = false
+          touchTempDisabled = false
+
+          // If the number of matches is equal to the number of pairs of cards then win
+          matchesCount++
+          if(matchesCount == itemCount/2) {
+            gameCallback.onWin()
+            return@OnClickListener
+          }
         } else {
           cardList[positionPreviousCard]
               .flipView!!.isFlipEnabled = true
@@ -69,16 +87,23 @@ class CardAdapter(
               .flipView!!.isFlipEnabled = true
           handler.postDelayed({
             cardList[positionPreviousCard].flipView!!.flipTheView()
-            cardList[position].flipView!!.flipTheView()
+            it.flipTheView()
+            touchTempDisabled = false
           }, 700)
         }
-        CARDS_FLIPPED = 0
+
+        cardsFlipped = 0
+
+        tryCount++
+        if(tryCount >= tryLimit) {
+          gameCallback.onLose()
+        }
       }
     })
   }
 
   override fun getItemCount(): Int {
-    return CARDS_COUNT
+    return cardList.size
   }
 
   inner class CardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -90,11 +115,5 @@ class CardAdapter(
 
   fun setParams(params: RelativeLayout.LayoutParams) {
     this.params = params
-  }
-
-  companion object {
-    private var CARDS_FLIPPED = 0
-    private var positionPreviousCard = 0
-    private var firstBinding = true
   }
 }

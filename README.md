@@ -27,7 +27,7 @@ You feel that the app can be improved somehow? Maybe the architecture can be mad
 ```
 * Fork the repository and clone to your local machine
 ```
-git clone https://github.com/your-username/World-Now.git
+git clone https://github.com/your-username/Memory-Game.git
 ```
 * Create a separate branch in format `issue-number`
 ```

@@ -1,5 +1,5 @@
 # Contributors to Memory-Game
-Here you can found the people that has contributed in this project
+Here you can find the people that has contributed in this project:
 
 ## Name: Nikhil Bansal
 ## GitHub: [nikhilbansal97](https://github.com/nikhilbansal97)

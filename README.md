@@ -46,5 +46,7 @@ git push origin branch-name
 * Create a new pull request from your forked repository
 * Wait for your PR to be merged and approved.
 
+### License
+[Apache License](LICENSE)
 
 Made with 💙 in Kotlin

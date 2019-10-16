@@ -23,8 +23,8 @@ class MainActivity : AppCompatActivity(), GameCallback {
 
         recyclerView = findViewById(R.id.recyclerView)
 
-        numTiles = intent?.getIntExtra("NUM_TILES", 4)
-        numTries = intent?.getIntExtra("NUM_TRIES", 4)
+        numTiles = intent?.getIntExtra(Constants.NUM_TILES, 4)
+        numTries = intent?.getIntExtra(Constants.NUM_TRIES, 4)
 
         prepareGame(numTiles!!, numTries!!)
     }

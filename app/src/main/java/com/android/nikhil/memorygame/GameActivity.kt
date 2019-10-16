@@ -33,8 +33,8 @@ class GameActivity : AppCompatActivity(), View.OnClickListener {
         }
 
         val launchIntent = Intent(this, MainActivity::class.java)
-        launchIntent.putExtra("NUM_TILES", numTiles)
-        launchIntent.putExtra("NUM_TRIES", numTries)
+        launchIntent.putExtra(Constants.NUM_TILES, numTiles)
+        launchIntent.putExtra(Constants.NUM_TRIES, numTries)
         startActivity(launchIntent)
     }
 }

@@ -7,4 +7,8 @@
     <string name="card_front">Card Front</string>
     <string name="test">TEST</string>
     <string name="card_back">card back</string>
+    <string name="instruction_hint">Pick Your Challenge</string>
+    <string name="btn_easy">Easy</string>
+    <string name="btn_medium">Medium</string>
+    <string name="btn_hard">Hard</string>
 </resources>

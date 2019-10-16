@@ -1,19 +1,14 @@
 package com.android.nikhil.memorygame
 
-import android.app.Dialog
-import android.app.DialogFragment
 import android.content.DialogInterface
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.util.DisplayMetrics
 import android.view.WindowManager
 import android.widget.RelativeLayout
 import com.android.nikhil.memorygame.Constants.MARGIN
-import kotlinx.android.synthetic.main.dialog_game.view.*
 import java.util.ArrayList
 
 class MainActivity : AppCompatActivity(), GameCallback {
@@ -47,7 +42,7 @@ class MainActivity : AppCompatActivity(), GameCallback {
 
         cardAdapter.setParams(params)
         recyclerView.adapter = cardAdapter
-        recyclerView.adapter.notifyDataSetChanged()
+        (recyclerView.adapter as CardAdapter).notifyDataSetChanged()
         recyclerView.layoutManager = GridLayoutManager(this, columns)
     }
 
@@ -68,45 +63,5 @@ class MainActivity : AppCompatActivity(), GameCallback {
 
     override fun onLose() {
         GameDialog.newInstance(getString(R.string.lose)).setOnDismissListener(DialogInterface.OnDismissListener { reset() }).show(fragmentManager, null)
-    }
-}
-
-interface GameCallback {
-    fun onWin()
-    fun onLose()
-}
-
-class GameDialog : DialogFragment() {
-
-    companion object {
-        fun newInstance(message: String): GameDialog {
-            val frag = GameDialog()
-            val args = Bundle()
-            args.putString("message", message)
-            frag.arguments = args
-            return frag
-        }
-    }
-
-    private lateinit var dismissListener: DialogInterface.OnDismissListener
-
-    fun setOnDismissListener(listener: DialogInterface.OnDismissListener): GameDialog {
-        dismissListener = listener
-        return this
-    }
-
-    override fun onDismiss(dialog: DialogInterface?) {
-        dismissListener.onDismiss(dialog)
-        super.onDismiss(dialog)
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val view = activity.layoutInflater.inflate(R.layout.dialog_game, null)
-        val message = arguments.getString("message")
-        message?.let { view.message.text = it }
-        val dialog = super.onCreateDialog(savedInstanceState)
-        dialog.setContentView(view)
-        dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        return dialog
     }
 }

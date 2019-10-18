@@ -13,8 +13,7 @@ import java.util.ArrayList
 
 class MainActivity : AppCompatActivity(), GameCallback {
 
-    private var numTries: Int? = 4
-    private var numTiles: Int? = 4
+    private var currentLevel: Int = 1
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,13 +22,28 @@ class MainActivity : AppCompatActivity(), GameCallback {
 
         recyclerView = findViewById(R.id.recyclerView)
 
-        numTiles = intent?.getIntExtra(Constants.NUM_TILES, 4)
-        numTries = intent?.getIntExtra(Constants.NUM_TRIES, 4)
-
-        prepareGame(numTiles!!, numTries!!)
+        prepareGame()
     }
 
-    private fun prepareGame(numTiles: Int, numTries: Int) {
+    private fun prepareGame() {
+
+        // Level 1..3
+        var numTries = 4
+        var numTiles = 4
+
+        when (currentLevel) {
+            in 4..7 -> {
+                numTries = 8
+                numTiles = 8
+            }
+            in 8..10 -> {
+                numTries = 10
+                numTiles = 10
+            }
+        }
+
+        GameDialog.newInstance(String.format(resources.getString(R.string.level_display), currentLevel))
+                .show(fragmentManager, null)
 
         val cards = getCardsList(numTiles / 2)
 
@@ -58,6 +72,7 @@ class MainActivity : AppCompatActivity(), GameCallback {
             cards.add(Card(R.drawable.ic_fingerprint))
             cards.add(Card(R.drawable.ic_pets))
             cards.add(Card(R.drawable.ic_gamepad))
+            cards.add(Card(R.drawable.ic_beach_access))
             return cards
         }
 
@@ -70,16 +85,25 @@ class MainActivity : AppCompatActivity(), GameCallback {
     }
 
     override fun onWin() {
-        GameDialog.newInstance(getString(R.string.win))
-                .setOnDismissListener(DialogInterface.OnDismissListener {
-                    prepareGame(this.numTiles!!, this.numTries!!)
-                }).show(fragmentManager, null)
+        currentLevel++
+
+        if (currentLevel > 10) {
+            GameDialog.newInstance(getString(R.string.game_complete))
+                    .setOnDismissListener(DialogInterface.OnDismissListener { finish() })
+                    .show(fragmentManager, null)
+        } else {
+
+            GameDialog.newInstance(getString(R.string.win))
+                    .setOnDismissListener(DialogInterface.OnDismissListener {
+                        prepareGame()
+                    }).show(fragmentManager, null)
+        }
     }
 
     override fun onLose() {
         GameDialog.newInstance(getString(R.string.lose))
                 .setOnDismissListener(DialogInterface.OnDismissListener {
-                    prepareGame(this.numTiles!!, this.numTries!!)
+                    prepareGame()
                 }).show(fragmentManager, null)
     }
 }

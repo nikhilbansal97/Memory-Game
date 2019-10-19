@@ -1,7 +1,11 @@
 <resources>
-  <string name="app_name">MemoryGame</string>
-  <string name="card_name">Card Name</string>
-  <string name="question_mark">\?</string>
-  <string name="win">WIN!</string>
-  <string name="lose">GAME OVER</string>
+    <string name="app_name">MemoryGame</string>
+    <string name="question_mark">\?</string>
+    <string name="win">WIN!</string>
+    <string name="lose">GAME OVER</string>
+    <string name="card_front">Card Front</string>
+    <string name="test">TEST</string>
+    <string name="card_back">card back</string>
+    <string name="level_display">Level: %s</string>
+    <string name="game_complete">Game is Completed</string>
 </resources>

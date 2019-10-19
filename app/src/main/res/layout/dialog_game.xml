@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:text="TEST"
+    android:text="@string/test"
     android:textColor="@color/white_200"
     android:textSize="60sp"
     android:id="@+id/message">

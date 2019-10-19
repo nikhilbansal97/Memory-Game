@@ -13,7 +13,7 @@ import java.util.ArrayList
 
 class MainActivity : AppCompatActivity(), GameCallback {
 
-    private var currentLevel: Int = 12
+    private var currentLevel: Int = 1
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {

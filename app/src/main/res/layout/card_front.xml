@@ -24,7 +24,7 @@
             android:fontFamily="sans-serif"
             android:text="@string/card_front"
             android:textColor="@color/white_200"
-            android:textSize="20sp"
+            android:textSize="32sp"
             android:textStyle="bold"
             tools:targetApi="jelly_bean" />
 

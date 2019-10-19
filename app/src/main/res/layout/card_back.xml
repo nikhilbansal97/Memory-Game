@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:background="@drawable/gradient"
         android:foreground="?selectableItemBackground"
-        android:padding="30dp">
+        android:padding="24dp">
 
         <ImageView
             android:id="@+id/cardImageView"

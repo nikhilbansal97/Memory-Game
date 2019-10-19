@@ -13,7 +13,7 @@ import java.util.ArrayList
 
 class MainActivity : AppCompatActivity(), GameCallback {
 
-    private var currentLevel: Int = 1
+    private var currentLevel: Int = 12
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +40,22 @@ class MainActivity : AppCompatActivity(), GameCallback {
                 numTries = 10
                 numTiles = 10
             }
+            in 11..13 -> {
+                numTries = 12
+                numTiles = 12
+            }
+            in 14..16 -> {
+                numTries = 14
+                numTiles = 14
+            }
+            in 17..18 -> {
+                numTries = 16
+                numTiles = 16
+            }
+            in 19..20 -> {
+                numTries = 18
+                numTiles = 18
+            }
         }
 
         GameDialog.newInstance(String.format(resources.getString(R.string.level_display), currentLevel))
@@ -49,7 +65,10 @@ class MainActivity : AppCompatActivity(), GameCallback {
 
         val cardAdapter = CardAdapter(this, cards, this, numTries)
 
-        val columns = 2
+        var columns = 2
+        if (currentLevel > 12) {
+            columns = 3
+        }
         val rows = cards.size / columns
 
         val displayMetrics = DisplayMetrics()
@@ -73,6 +92,10 @@ class MainActivity : AppCompatActivity(), GameCallback {
             cards.add(Card(R.drawable.ic_pets))
             cards.add(Card(R.drawable.ic_gamepad))
             cards.add(Card(R.drawable.ic_beach_access))
+            cards.add(Card(R.drawable.ic_cake))
+            cards.add(Card(R.drawable.ic_airport_shuttle))
+            cards.add(Card(R.drawable.ic_attach_money))
+            cards.add(Card(R.drawable.ic_child_care))
             return cards
         }
 
@@ -87,7 +110,7 @@ class MainActivity : AppCompatActivity(), GameCallback {
     override fun onWin() {
         currentLevel++
 
-        if (currentLevel > 10) {
+        if (currentLevel > 18) {
             GameDialog.newInstance(getString(R.string.game_complete))
                     .setOnDismissListener(DialogInterface.OnDismissListener { finish() })
                     .show(fragmentManager, null)

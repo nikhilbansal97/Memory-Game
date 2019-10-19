@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity(), GameCallback {
 
     private fun getCardsList(numTiles: Int): ArrayList<Card> {
         val cards = ArrayList<Card>()
-        cards.addAll(listOfCards.subList(0, numTiles))
+        cards.addAll(listOfCards.shuffled().subList(0, numTiles))
         cards.addAll(cards.map { it.copy() })
         cards.shuffle()
         return cards

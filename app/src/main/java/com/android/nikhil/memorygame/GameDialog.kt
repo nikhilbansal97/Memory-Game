@@ -20,15 +20,15 @@ class GameDialog : DialogFragment() {
         }
     }
 
-    private lateinit var dismissListener: DialogInterface.OnDismissListener
+    private var dismissListener: DialogInterface.OnDismissListener? = null
 
-    fun setOnDismissListener(listener: DialogInterface.OnDismissListener): GameDialog {
+    fun setOnDismissListener(listener: DialogInterface.OnDismissListener?): GameDialog {
         dismissListener = listener
         return this
     }
 
     override fun onDismiss(dialog: DialogInterface?) {
-        dismissListener.onDismiss(dialog)
+        dismissListener?.onDismiss(dialog)
         super.onDismiss(dialog)
     }
 

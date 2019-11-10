@@ -1,4 +1,4 @@
-package com.android.nikhil.memorygame
+package com.android.nikhil.memorygame.models
 
 import com.wajahatkarim3.easyflipview.EasyFlipView
 

@@ -1,4 +1,4 @@
-package com.android.nikhil.memorygame
+package com.android.nikhil.memorygame.ui
 
 import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
@@ -8,7 +8,14 @@ import androidx.recyclerview.widget.RecyclerView
 import android.util.DisplayMetrics
 import android.view.WindowManager
 import android.widget.RelativeLayout
-import com.android.nikhil.memorygame.Constants.MARGIN
+import com.android.nikhil.memorygame.models.Card
+import com.android.nikhil.memorygame.utils.Constants.MARGIN
+import com.android.nikhil.memorygame.utils.GameCallback
+import com.android.nikhil.memorygame.utils.GameDialog
+import com.android.nikhil.memorygame.R.drawable
+import com.android.nikhil.memorygame.R.id
+import com.android.nikhil.memorygame.R.layout
+import com.android.nikhil.memorygame.R.string
 import java.util.ArrayList
 
 class MainActivity : AppCompatActivity(), GameCallback {
@@ -18,9 +25,9 @@ class MainActivity : AppCompatActivity(), GameCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(layout.activity_main)
 
-        recyclerView = findViewById(R.id.recyclerView)
+        recyclerView = findViewById(id.recyclerView)
 
         prepareGame()
     }
@@ -58,7 +65,13 @@ class MainActivity : AppCompatActivity(), GameCallback {
             }
         }
 
-        GameDialog.newInstance(String.format(resources.getString(R.string.level_display), currentLevel))
+        GameDialog.newInstance(
+          String.format(
+            resources.getString(
+              string.level_display
+            ), currentLevel
+          )
+        )
                 .show(fragmentManager, null)
 
         val cards = getCardsList(numTiles / 2)
@@ -87,15 +100,15 @@ class MainActivity : AppCompatActivity(), GameCallback {
     private val listOfCards: ArrayList<Card>
         get() {
             val cards = ArrayList<Card>()
-            cards.add(Card(R.drawable.ic_color_lens))
-            cards.add(Card(R.drawable.ic_fingerprint))
-            cards.add(Card(R.drawable.ic_pets))
-            cards.add(Card(R.drawable.ic_gamepad))
-            cards.add(Card(R.drawable.ic_beach_access))
-            cards.add(Card(R.drawable.ic_cake))
-            cards.add(Card(R.drawable.ic_airport_shuttle))
-            cards.add(Card(R.drawable.ic_attach_money))
-            cards.add(Card(R.drawable.ic_child_care))
+            cards.add(Card(drawable.ic_color_lens))
+            cards.add(Card(drawable.ic_fingerprint))
+            cards.add(Card(drawable.ic_pets))
+            cards.add(Card(drawable.ic_gamepad))
+            cards.add(Card(drawable.ic_beach_access))
+            cards.add(Card(drawable.ic_cake))
+            cards.add(Card(drawable.ic_airport_shuttle))
+            cards.add(Card(drawable.ic_attach_money))
+            cards.add(Card(drawable.ic_child_care))
             return cards
         }
 
@@ -111,12 +124,12 @@ class MainActivity : AppCompatActivity(), GameCallback {
         currentLevel++
 
         if (currentLevel > 18) {
-            GameDialog.newInstance(getString(R.string.game_complete))
+            GameDialog.newInstance(getString(string.game_complete))
                     .setOnDismissListener(DialogInterface.OnDismissListener { finish() })
                     .show(fragmentManager, null)
         } else {
 
-            GameDialog.newInstance(getString(R.string.win))
+            GameDialog.newInstance(getString(string.win))
                     .setOnDismissListener(DialogInterface.OnDismissListener {
                         prepareGame()
                     }).show(fragmentManager, null)
@@ -124,7 +137,7 @@ class MainActivity : AppCompatActivity(), GameCallback {
     }
 
     override fun onLose() {
-        GameDialog.newInstance(getString(R.string.lose))
+        GameDialog.newInstance(getString(string.lose))
                 .setOnDismissListener(DialogInterface.OnDismissListener {
                     prepareGame()
                 }).show(fragmentManager, null)

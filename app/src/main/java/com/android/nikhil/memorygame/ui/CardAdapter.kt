@@ -1,4 +1,4 @@
-package com.android.nikhil.memorygame
+package com.android.nikhil.memorygame.ui
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
@@ -9,7 +9,12 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.os.Handler
+import com.android.nikhil.memorygame.R.id
+import com.android.nikhil.memorygame.R.layout
 import com.android.nikhil.memorygame.R.string
+import com.android.nikhil.memorygame.models.Card
+import com.android.nikhil.memorygame.ui.CardAdapter.CardViewHolder
+import com.android.nikhil.memorygame.utils.GameCallback
 import com.wajahatkarim3.easyflipview.EasyFlipView
 import kotlinx.android.synthetic.main.card_front.view.cardViewTextView
 
@@ -24,7 +29,7 @@ class CardAdapter(
         private val cardList: ArrayList<Card>,
         private val gameCallback: GameCallback,
         private val tryLimit: Int
-) : RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
+) : RecyclerView.Adapter<CardViewHolder>() {
     private var params: RelativeLayout.LayoutParams? = null
     private val handler = Handler()
 
@@ -38,7 +43,7 @@ class CardAdapter(
             parent: ViewGroup,
             viewType: Int
     ): CardViewHolder {
-        return CardViewHolder(LayoutInflater.from(context).inflate(R.layout.card_item, parent, false))
+        return CardViewHolder(LayoutInflater.from(context).inflate(layout.card_item, parent, false))
     }
 
     override fun onBindViewHolder(
@@ -108,9 +113,9 @@ class CardAdapter(
 
     inner class CardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textView = itemView.cardViewTextView as TextView
-        val rootLayout = itemView.findViewById(R.id.cardViewRootLayout) as RelativeLayout
-        val flipView = itemView.findViewById(R.id.flipView) as EasyFlipView
-        val cardImageView = itemView.findViewById(R.id.cardImageView) as ImageView
+        val rootLayout = itemView.findViewById(id.cardViewRootLayout) as RelativeLayout
+        val flipView = itemView.findViewById(id.flipView) as EasyFlipView
+        val cardImageView = itemView.findViewById(id.cardImageView) as ImageView
     }
 
     fun setParams(params: RelativeLayout.LayoutParams) {

@@ -1,4 +1,4 @@
-package com.android.nikhil.memorygame
+package com.android.nikhil.memorygame.utils
 
 interface GameCallback {
     fun onWin()

@@ -1,4 +1,4 @@
-package com.android.nikhil.memorygame
+package com.android.nikhil.memorygame.utils
 
 import android.app.Dialog
 import android.app.DialogFragment
@@ -6,6 +6,7 @@ import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import com.android.nikhil.memorygame.R.layout
 import kotlinx.android.synthetic.main.dialog_game.view.*
 
 class GameDialog : DialogFragment() {
@@ -33,7 +34,7 @@ class GameDialog : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val view = activity.layoutInflater.inflate(R.layout.dialog_game, null)
+        val view = activity.layoutInflater.inflate(layout.dialog_game, null)
         val message = arguments.getString("message")
         message?.let { view.message.text = it }
         val dialog = super.onCreateDialog(savedInstanceState)
